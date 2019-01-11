@@ -2,6 +2,7 @@ import * as charm from 'charm';
 import { createCoverageMap, CoverageMap } from 'istanbul-lib-coverage';
 import { Writable } from 'stream';
 
+// import Test, { isTest } from '../Test';
 import Test from '../Test';
 import Suite from '../Suite';
 import { createEventHandler } from './Reporter';
@@ -229,8 +230,28 @@ export default class Runner extends TextCoverage implements RunnerProperties {
       const error = suite.error;
       const charm = this.charm;
 
+      // if (suite.tests) {
+      //   suite.tests
+      //     .filter(isTest)
+      //     .filter(
+      //       test =>
+      //         isTest(test) &&
+      //         test.suiteError &&
+      //         !test.error &&
+      //         !test.hasPassed &&
+      //         !test.skipped
+      //     )
+      //     .forEach(test => {
+      //       this.testEnd(test);
+      //     });
+      // }
+
       charm.foreground('red');
-      charm.write('Suite ' + suite.id + ' FAILED\n');
+      charm.write(
+        `Suite ${suite.id} ERROR${
+          error.lifecycleMethod ? ` in ${error.lifecycleMethod}` : ''
+        }\n`
+      );
       charm.write(this.formatError(error));
       charm.display('reset');
       charm.write('\n');
